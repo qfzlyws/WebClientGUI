@@ -14,7 +14,7 @@ public class URLPanel extends JPanel {
 	private JComboBox<String> methods;
 	private JTextField urlTextField;
 
-	public URLPanel(ActionListener sendRequestListener) {
+	public URLPanel(ActionListener actionListener) {
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		JLabel urlTextLabel = new JLabel("URL:");
 		methods = new JComboBox<>();
@@ -22,13 +22,16 @@ public class URLPanel extends JPanel {
 		methods.addItem("POST");
 		urlTextField = new JTextField(30);
 		JButton sendButton = new JButton("Send");
+		JButton saveButton = new JButton("Save");
 
-		sendButton.addActionListener(sendRequestListener);
+		sendButton.addActionListener(actionListener);
+		saveButton.addActionListener(actionListener);
 
 		this.add(urlTextLabel);
 		this.add(methods);
 		this.add(new JScrollPane(urlTextField));
 		this.add(sendButton);
+		this.add(saveButton);
 	}
 
 	public String getHttpMethod() {

@@ -1,11 +1,12 @@
 package com.dgys.app;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
@@ -15,51 +16,78 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class WebClient {
 	private HttpClient httpClient = HttpClientBuilder.create().build();
+	private List<RequestData> requestDataList;
+	private File configFile = new File("WebClientGUI.json");
 	
-	public String postWithUrlEncodedParam(String urlString, Map<String, String> headerParams, List<NameValuePair> urlEncodedParams) throws IOException {
-		HttpPost httpPost = new HttpPost(urlString);
+	public WebClient() {
+		ObjectMapper objectMapper = new ObjectMapper();
 		
-		for(Map.Entry<String, String> entry : headerParams.entrySet()) {
+		try {
+			requestDataList = objectMapper.readValue(configFile, new TypeReference<List<RequestData>>() {});
+		} catch(Exception e) {
+			requestDataList = new ArrayList<>();
+		}
+	}
+	
+	public String postWithUrlEncodedParam(RequestData requestData) throws IOException {
+		HttpPost httpPost = new HttpPost(requestData.getUrl());
+		
+		for(Map.Entry<String, String> entry : requestData.getHeaderParams().entrySet()) {
 			httpPost.setHeader(entry.getKey(), entry.getValue());
 		}
 		
-		if(headerParams.isEmpty())
+		if(requestData.getHeaderParams().isEmpty())
 			httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
 		
-		UrlEncodedFormEntity entity = new UrlEncodedFormEntity(urlEncodedParams);
+		UrlEncodedFormEntity entity = new UrlEncodedFormEntity(requestData.getUrlEncodedParams());
 		httpPost.setEntity(entity);
 		
 		return getResponse(httpPost);
 	}
 	
-	public String getWithBearerToken(String urlString, Map<String, String> headerParams, String token) throws IOException {		
-		HttpGet httpGet = new HttpGet(urlString);
+	public String getWithBearerToken(RequestData requestData) throws IOException {		
+		HttpGet httpGet = new HttpGet(requestData.getUrl());
 		
-		for(Map.Entry<String, String> entry : headerParams.entrySet()) {
+		for(Map.Entry<String, String> entry : requestData.getHeaderParams().entrySet()) {
 			httpGet.setHeader(entry.getKey(), entry.getValue());
 		}
 		
-		if(headerParams.isEmpty())
-			httpGet.addHeader("Authorization", "Bearer " + token);
+		if(requestData.getHeaderParams().isEmpty())
+			httpGet.addHeader("Authorization", "Bearer " + requestData.getTokenText());
 		
 		return getResponse(httpGet);
 	}
 	
-	public String postWithJSON(String urlString, Map<String, String> headerParams, String jsonBody) throws IOException {		
-		HttpPost httpPost = new HttpPost(urlString);
+	public String postWithJSON(RequestData requestData) throws IOException {		
+		HttpPost httpPost = new HttpPost(requestData.getUrl());
 		
-		for(Map.Entry<String, String> entry : headerParams.entrySet()) {
+		for(Map.Entry<String, String> entry : requestData.getHeaderParams().entrySet()) {
 			httpPost.setHeader(entry.getKey(), entry.getValue());
 		}
 		
-		if(headerParams.isEmpty())
+		if(requestData.getHeaderParams().isEmpty())
 			httpPost.setHeader("Content-Type", "application/json");
 		
-		httpPost.setEntity(new StringEntity(jsonBody,"UTF-8"));
+		httpPost.setEntity(new StringEntity(requestData.getJsonBody(),"UTF-8"));
 		
 		return getResponse(httpPost);
+	}
+	
+	public void saveRequestData(RequestData requestData) throws IOException {
+		if (!requestDataList.contains(requestData))
+			requestDataList.add(requestData);
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.writeValue(configFile, requestDataList);
+	}
+	
+	public List<RequestData> getRequestDataList() {
+		return requestDataList;
 	}
 	
 	private String getResponse(HttpUriRequest request) throws IOException {
