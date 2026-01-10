@@ -1,6 +1,6 @@
 # A simple WEB API Client builded with Java Swing components
 # Dependencies
-  1. Apache HttpClient4.5.14
+  Apache HttpClient4.5.14
 # Summary
   1. Support GET,POST method
   2. Support add header parameters
