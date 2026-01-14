@@ -3,7 +3,6 @@ package com.dgys.app.ui;
 import java.awt.BorderLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -152,8 +151,8 @@ public class BodyPanel extends JPanel {
 	}
 
 	public void setUrlEncodedParams(List<NameValuePair> urlEncodedParams) {
+		this.urlEncodedParams = urlEncodedParams;
 		this.tableModel.setRowCount(0);
-		this.urlEncodedParams = new ArrayList<>();
 		this.tableModel.addRow(new Object[] {"",""});
 		
 		if (urlEncodedParams == null || urlEncodedParams.isEmpty())

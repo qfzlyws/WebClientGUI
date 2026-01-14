@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -35,12 +36,13 @@ public class RequestListPanel extends JPanel {
 		addButton.addActionListener(actionListener);
 		deleteButton.addActionListener(actionListener);
 		JPanel northComponent = new JPanel();
+		northComponent.setBorder(BorderFactory.createEtchedBorder());
 		northComponent.add(addButton);
 		northComponent.add(deleteButton);
 		
 		this.add(northComponent, BorderLayout.NORTH);
 		this.add(new JScrollPane(table));
-		this.setPreferredSize(new Dimension(250,30));
+		this.setPreferredSize(new Dimension(230,30));
 	}
 	
 	public void newRequest(RequestData requestData) {

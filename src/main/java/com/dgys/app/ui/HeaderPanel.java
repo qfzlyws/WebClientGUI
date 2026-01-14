@@ -1,7 +1,6 @@
 package com.dgys.app.ui;
 
 import java.awt.BorderLayout;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -61,8 +60,8 @@ public class HeaderPanel extends JPanel {
 	}
 
 	private void setHeaderParams(Map<String, String> headerParams) {
+		this.headerParams = headerParams;
 		this.tableModel.setRowCount(0);
-		this.headerParams = new HashMap<>();
 		
 		if (headerParams == null || headerParams.isEmpty())
 			return;

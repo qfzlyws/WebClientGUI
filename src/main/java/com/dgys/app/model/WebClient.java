@@ -123,7 +123,7 @@ public class WebClient {
 		requestData.setTokenText("");
 		requestData.setBodyOption(Byte.parseByte("1"));
 		requestData.setJsonBody("");
-		requestData.setHeaderParams(new HashMap<String, String>());
+		requestData.setHeaderParams(new HashMap<>());
 		requestData.setUrlEncodedParams(new ArrayList<>());
 		return requestData;
 	}

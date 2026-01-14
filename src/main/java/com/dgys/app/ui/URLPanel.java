@@ -2,6 +2,8 @@ package com.dgys.app.ui;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -36,6 +38,7 @@ public class URLPanel extends JPanel {
 		this.add(new JScrollPane(urlTextField));
 		this.add(sendButton);
 		this.add(saveButton);
+		this.setBorder(BorderFactory.createEtchedBorder());
 	}
 
 	public String getHttpMethod() {
