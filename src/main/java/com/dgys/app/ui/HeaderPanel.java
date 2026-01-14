@@ -20,7 +20,6 @@ public class HeaderPanel extends JPanel {
 	private Map<String,String> headerParams;
 	public HeaderPanel() {
 		this.setLayout(new BorderLayout());
-		headerParams = new HashMap<>();
 		
 		addButton = new JButton("Add");
 		
@@ -62,7 +61,8 @@ public class HeaderPanel extends JPanel {
 	}
 
 	private void setHeaderParams(Map<String, String> headerParams) {
-		tableModel.setRowCount(0);
+		this.tableModel.setRowCount(0);
+		this.headerParams = new HashMap<>();
 		
 		if (headerParams == null || headerParams.isEmpty())
 			return;

@@ -32,7 +32,6 @@ public class BodyPanel extends JPanel {
 	
 	public BodyPanel() {
 		this.setLayout(new BorderLayout());
-		urlEncodedParams = new ArrayList<>();
 		initComponent();
 	}
 	
@@ -153,8 +152,9 @@ public class BodyPanel extends JPanel {
 	}
 
 	public void setUrlEncodedParams(List<NameValuePair> urlEncodedParams) {
-		tableModel.setRowCount(0);
-		tableModel.addRow(new Object[] {"",""});
+		this.tableModel.setRowCount(0);
+		this.urlEncodedParams = new ArrayList<>();
+		this.tableModel.addRow(new Object[] {"",""});
 		
 		if (urlEncodedParams == null || urlEncodedParams.isEmpty())
 			return;
