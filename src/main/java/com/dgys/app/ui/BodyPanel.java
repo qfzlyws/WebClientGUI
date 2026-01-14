@@ -1,4 +1,4 @@
-package com.dgys.app;
+package com.dgys.app.ui;
 
 import java.awt.BorderLayout;
 import java.awt.event.KeyAdapter;
@@ -17,11 +17,17 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.dgys.app.model.RequestData;
+
 @SuppressWarnings("serial")
 public class BodyPanel extends JPanel {
 	private DefaultTableModel tableModel;
+	private JTable bodyTable;
 	private JTextArea jsonBody;
 	private byte selectedOption;
+	private JRadioButton option1;
+	private JRadioButton option2;
+	private JRadioButton option3;
 	private List<NameValuePair> urlEncodedParams;
 	
 	public BodyPanel() {
@@ -34,8 +40,7 @@ public class BodyPanel extends JPanel {
 		tableModel = new DefaultTableModel();
 		tableModel.addColumn("KEY");
 		tableModel.addColumn("VALUE");
-		tableModel.addRow(new Object[] {"",""});
-		JTable bodyTable = new JTable(tableModel);
+		bodyTable = new JTable(tableModel);
 		bodyTable.setRowHeight(25);
 		bodyTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		bodyTable.addKeyListener(new KeyAdapter() {
@@ -50,9 +55,9 @@ public class BodyPanel extends JPanel {
 		JScrollPane tableScrollPane = new JScrollPane(bodyTable);
 		
 		ButtonGroup buttonGroup = new ButtonGroup();
-		JRadioButton option1 = new JRadioButton("none");
-		JRadioButton option2 = new JRadioButton("x-www-form-urlencoded");
-		JRadioButton option3 = new JRadioButton("json");
+		option1 = new JRadioButton("none");
+		option2 = new JRadioButton("x-www-form-urlencoded");
+		option3 = new JRadioButton("json");
 		buttonGroup.add(option1);
 		buttonGroup.add(option2);
 		buttonGroup.add(option3);
@@ -111,5 +116,52 @@ public class BodyPanel extends JPanel {
 	
 	public String getJsonBody() {
 		return jsonBody.getText();
+	}
+	
+	public void setComponentEnable(boolean enabled) {
+		this.option1.setEnabled(enabled);
+		this.option2.setEnabled(enabled);
+		this.option3.setEnabled(enabled);
+		this.jsonBody.setEnabled(enabled);
+		this.bodyTable.setEnabled(enabled);
+	}
+	
+	public void setRequestData(RequestData requestData) {
+		setSelectedOption(requestData.getBodyOption());
+		setJsonBody(requestData.getJsonBody());
+		setUrlEncodedParams(requestData.getUrlEncodedParams());
+	}
+
+	private void setJsonBody(String json) {
+		this.jsonBody.setText(json);
+	}
+
+	private void setSelectedOption(byte selectedOption) {
+		switch (selectedOption) {
+		case 1:
+			option1.setSelected(true);
+			break;
+		case 2:
+			option2.setSelected(true);
+			break;
+		case 3:
+			option3.setSelected(true);
+			break;
+		default:
+			option1.setSelected(true);
+		}
+	}
+
+	public void setUrlEncodedParams(List<NameValuePair> urlEncodedParams) {
+		tableModel.setRowCount(0);
+		tableModel.addRow(new Object[] {"",""});
+		
+		if (urlEncodedParams == null || urlEncodedParams.isEmpty())
+			return;
+		
+		urlEncodedParams.forEach(obj -> {
+			Object[] rowData = {obj.getName(), obj.getValue()};
+			tableModel.addRow(rowData);
+		});
 	}
 }

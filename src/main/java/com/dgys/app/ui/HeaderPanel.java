@@ -1,4 +1,4 @@
-package com.dgys.app;
+package com.dgys.app.ui;
 
 import java.awt.BorderLayout;
 import java.util.HashMap;
@@ -10,26 +10,30 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import com.dgys.app.model.RequestData;
+
 @SuppressWarnings("serial")
 public class HeaderPanel extends JPanel {
 	private DefaultTableModel tableModel;
+	private JTable table;
+	private JButton addButton;
 	private Map<String,String> headerParams;
 	public HeaderPanel() {
 		this.setLayout(new BorderLayout());
 		headerParams = new HashMap<>();
 		
-		JButton addButton = new JButton("Add");
+		addButton = new JButton("Add");
 		
 		tableModel = new DefaultTableModel();
 		tableModel.addColumn("KEY");
 		tableModel.addColumn("VALUE");
 		
-		JTable headerData = new JTable(tableModel);
-		headerData.setRowHeight(25);
+		table = new JTable(tableModel);
+		table.setRowHeight(25);
 		
 		addButton.addActionListener(event -> tableModel.addRow(new Object[] {"",""}));
 		
-		JScrollPane dataScrollPane = new JScrollPane(headerData);
+		JScrollPane dataScrollPane = new JScrollPane(table);
 		
 		this.add(addButton, BorderLayout.NORTH);
 		this.add(dataScrollPane, BorderLayout.CENTER);
@@ -46,5 +50,26 @@ public class HeaderPanel extends JPanel {
 		}
 		
 		return headerParams;
+	}
+	
+	public void setComponentEnable(boolean enabled) {
+		this.table.setEnabled(enabled);
+		this.addButton.setEnabled(enabled);
+	}
+	
+	public void setRequestData(RequestData requestData) {
+		setHeaderParams(requestData.getHeaderParams());
+	}
+
+	private void setHeaderParams(Map<String, String> headerParams) {
+		tableModel.setRowCount(0);
+		
+		if (headerParams == null || headerParams.isEmpty())
+			return;
+		
+		headerParams.forEach((key, value) -> {
+			Object[] rowData = {key, value};
+			tableModel.addRow(rowData);
+		});
 	}
 }

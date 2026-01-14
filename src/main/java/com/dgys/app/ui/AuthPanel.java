@@ -1,4 +1,4 @@
-package com.dgys.app;
+package com.dgys.app.ui;
 
 import java.awt.FlowLayout;
 
@@ -7,9 +7,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.dgys.app.model.RequestData;
+
 @SuppressWarnings("serial")
 public class AuthPanel extends JPanel {
-	private AuthOption authType;
+	private AuthOption authType = AuthOption.NONE;
+	private JComboBox<String> typeComboBox;
 	private JTextField tokenTextField;
 	public enum AuthOption {
 		NONE,BEARERTOKEN,BASICAUTH;
@@ -36,7 +39,7 @@ public class AuthPanel extends JPanel {
 	public AuthPanel() {
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		JLabel typeLabel = new JLabel("Type");
-		JComboBox<String> typeComboBox = new JComboBox<>();
+		typeComboBox = new JComboBox<>();
 		for(AuthOption option : AuthOption.values()) {
 			typeComboBox.addItem(option.toString());
 		}
@@ -49,11 +52,11 @@ public class AuthPanel extends JPanel {
 			String selectedItem = (String)typeComboBox.getSelectedItem();
 			
 			switch (selectedItem) {
-			case "NONE":
+			case "<空>":
 				authDataPanel.removeAll();
 				authType = AuthOption.NONE;
 				break;
-			case "BEARERTOKEN":
+			case "Bearer Token":
 				authDataPanel.removeAll();
 				authDataPanel.add(tokenLabel);
 				authDataPanel.add(tokenTextField);
@@ -77,5 +80,23 @@ public class AuthPanel extends JPanel {
 	
 	public String getTokenText() {
 		return tokenTextField.getText();
+	}
+	
+	public void setComponentEnable(boolean enabled) {
+		this.typeComboBox.setEnabled(enabled);
+		this.tokenTextField.setEnabled(enabled);
+	}
+	
+	public void setRequestData(RequestData requestData) {
+		setAuthType(requestData.getAuthType());
+		setTokenTextField(requestData.getTokenText());
+	}
+
+	private void setAuthType(AuthOption authType) {
+		typeComboBox.setSelectedItem(authType.toString());
+	}
+
+	private void setTokenTextField(String token) {
+		this.tokenTextField.setText(token);
 	}
 }
