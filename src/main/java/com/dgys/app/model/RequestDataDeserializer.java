@@ -41,7 +41,7 @@ public class RequestDataDeserializer extends StdDeserializer<RequestData> {
 		String jsonBody = jsonNode.get("jsonBody").asText();
 		List<NameValuePair> urlEncodedParams = new ArrayList<>();
 		
-		jsonNode.findValue("urlEncodedParams").forEach(field ->
+		jsonNode.get("urlEncodedParams").forEach(field ->
 			urlEncodedParams.add(new BasicNameValuePair(field.get("name").asText(), field.get("value").asText()))
 		);
 		

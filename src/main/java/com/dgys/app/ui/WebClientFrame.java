@@ -121,17 +121,14 @@ public class WebClientFrame extends JFrame implements ActionListener, MouseListe
 			if(requestData == null)
 				return;
 			
-			String name = "";
-			if (name.trim().equals(""))
-				name = JOptionPane.showInputDialog("Input a name for this request");
-			
-			if (name.trim().equals(""))
-				return;
-			
-			requestData.setName(name);
+			if (requestData.getName().trim().equals("")) {
+				String name = JOptionPane.showInputDialog("Input a name for this request");
+				if (name.trim().equals(""))
+					return;
+				requestData.setName(name);
+			}
 			
 			webClient.saveRequestData(requestData);
-			
 			requestListPanel.fireTableDataChanged();
 		} catch (Exception excep) {
 			result = excep.getMessage();

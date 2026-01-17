@@ -28,6 +28,7 @@ public class HeaderPanel extends JPanel {
 		
 		table = new JTable(tableModel);
 		table.setRowHeight(25);
+		table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		
 		addButton.addActionListener(event -> tableModel.addRow(new Object[] {"",""}));
 		

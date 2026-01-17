@@ -153,7 +153,6 @@ public class BodyPanel extends JPanel {
 	public void setUrlEncodedParams(List<NameValuePair> urlEncodedParams) {
 		this.urlEncodedParams = urlEncodedParams;
 		this.tableModel.setRowCount(0);
-		this.tableModel.addRow(new Object[] {"",""});
 		
 		if (urlEncodedParams == null || urlEncodedParams.isEmpty())
 			return;
@@ -162,5 +161,8 @@ public class BodyPanel extends JPanel {
 			Object[] rowData = {obj.getName(), obj.getValue()};
 			tableModel.addRow(rowData);
 		});
+		
+		if (tableModel.getRowCount() == 0)
+			this.tableModel.addRow(new Object[] {"",""});
 	}
 }

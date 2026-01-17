@@ -12,7 +12,7 @@ import com.dgys.app.model.RequestData;
 @SuppressWarnings("serial")
 public class AuthPanel extends JPanel {
 	private AuthOption authType = AuthOption.NONE;
-	private JComboBox<String> typeComboBox;
+	private JComboBox<AuthOption> typeComboBox;
 	private JTextField tokenTextField;
 	public enum AuthOption {
 		NONE,BEARERTOKEN,BASICAUTH;
@@ -41,7 +41,7 @@ public class AuthPanel extends JPanel {
 		JLabel typeLabel = new JLabel("Type");
 		typeComboBox = new JComboBox<>();
 		for(AuthOption option : AuthOption.values()) {
-			typeComboBox.addItem(option.toString());
+			typeComboBox.addItem(option);
 		}
 				
 		JPanel authDataPanel = new JPanel();
@@ -49,18 +49,16 @@ public class AuthPanel extends JPanel {
 		tokenTextField = new JTextField(30);
 		
 		typeComboBox.addActionListener(e -> {
-			String selectedItem = (String)typeComboBox.getSelectedItem();
+			authType = (AuthOption) typeComboBox.getSelectedItem();
 			
-			switch (selectedItem) {
-			case "<空>":
+			switch (authType) {
+			case NONE:
 				authDataPanel.removeAll();
-				authType = AuthOption.NONE;
 				break;
-			case "Bearer Token":
+			case BEARERTOKEN:
 				authDataPanel.removeAll();
 				authDataPanel.add(tokenLabel);
 				authDataPanel.add(tokenTextField);
-				authType = AuthOption.BEARERTOKEN;
 				break;
 			default:
 				
@@ -93,7 +91,7 @@ public class AuthPanel extends JPanel {
 	}
 
 	private void setAuthType(AuthOption authType) {
-		typeComboBox.setSelectedItem(authType.toString());
+		typeComboBox.setSelectedItem(authType);
 	}
 
 	private void setTokenTextField(String token) {
